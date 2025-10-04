@@ -11,20 +11,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:animationtask/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Animation screen renders and starts on tap', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Click Me'), findsOneWidget);
+    expect(find.byType(CircleAvatar), findsNWidgets(2));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.text('Click Me'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Let the animation advance a little to ensure no exceptions occur
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(tester.any(find.byType(AlignTransition)), isTrue);
   });
 }
